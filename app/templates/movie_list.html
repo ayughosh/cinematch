@@ -1,0 +1,99 @@
+{% if comfort_mode %}
+  {% if current_user.is_authenticated %}
+    <div class="container">
+    <h2 class="text-center mb-4">🧸 Your Comfort Films</h2>
+    <a href="/" class="btn btn-secondary">🏠 Back to Home</a>
+  {% else %}
+      <p>Please log in to see your comfort films.</p>
+  {% endif %}
+{% elif couple_mode %}
+<div class="container">
+  <h2 class="text-center mb-4">🧸 Films liked by both</h2>
+  <form method="POST" action="/couple-form" autocomplete="off">
+    <a href="{{ url_for('main.couple_form') }}" class="btn btn-secondary">Try Again</a>
+    <a href="/" class="btn btn-secondary">🏠 Back to Home</a>
+  </form>
+</div>
+{% else %}
+  <h2 class="text-center mb-4">Results for: "{{ query }}"</h2>
+  {% endif %} {% if movies %}
+  <ul class="list-unstyled">
+    {% for movie in movies %}
+    <li class="media my-2">
+      {% if movie.poster_path %}
+      <img
+        src="https://image.tmdb.org/t/p/w200{{ movie.poster_path }}"
+        class="mr-3 poster-img"
+        alt="{{ movie.title }}"
+      />
+      {% else %}
+      <img
+        src="{{url_for('static',filename='images/dummy_poster.png')}}"
+        class="mr-3 poster-img"
+        alt="{{ movie.title }}"
+      />
+      {% endif %}
+      <div class="media-body">
+        <h5 class="mt-0 mb-1">{{ movie.title }}</h5>
+        <p id="preview-{{ loop.index }}">{{ movie.overview[:150] }}...</p>
+
+        <!-- Full overview (hidden initially) -->
+        <div class="collapse" id="full-overview-{{ loop.index }}">
+          <p>{{ movie.overview }}</p>
+          <!-- Show Less inside expanded section -->
+          <button
+            class="btn btn-sm btn-outline-secondary"
+            onclick="
+                  document.getElementById('preview-{{ loop.index }}').style.display='block';
+                  document.getElementById('see-more-btn-{{ loop.index }}').style.display='inline-block';"
+            data-toggle="collapse"
+            data-target="#full-overview-{{ loop.index }}"
+          >
+            Show Less
+          </button>
+        </div>
+
+        <!-- Show More (below preview) -->
+        <button
+          class="btn btn-sm btn-outline-secondary mb-2"
+          id="see-more-btn-{{ loop.index }}"
+          type="button"
+          data-toggle="collapse"
+          data-target="#full-overview-{{ loop.index }}"
+          onclick="
+                document.getElementById('preview-{{ loop.index }}').style.display='none';
+                this.style.display='none';"
+        >
+          Show More
+        </button>
+        <p><strong>Rating:</strong> {{ movie.vote_average }}</p>
+        <p><strong>Release Date:</strong> {{ movie.release_date }}</p>
+        <p><strong>Genres:</strong> {{ movie.genre_names | join(', ') }}</p>
+        <p><strong>Original Language:</strong>{{movie.original_language}}</p>
+        {% if movie.predicted_mood %}
+        <p><strong>Mood:</strong>{{movie.predicted_mood}}</p>
+        {% endif %}
+        <a
+          href="https://www.google.com/search?q={{ movie.title }} watch online"
+          target="_blank"
+        >
+          🔗 Get streaming links on Google page
+        </a>
+        <form method="POST" action="/mark_watched">
+          <input type="hidden" name="movie_id" value="{{movie.id}}" />
+          <input type="hidden" name="movie_title" value="{{movie.title}}" />
+          <button type="submit" class="btn btn-sm btn-success">
+            🎬 Mark as Watched
+          </button>
+        </form>
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>No results found.</p>
+  {% endif %}
+
+  <!-- Search again button -->
+  <a href="/" class="btn btn-outline-primary mt-4">🔍 Search Again</a>
+</div>

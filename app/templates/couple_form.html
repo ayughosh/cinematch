@@ -1,0 +1,65 @@
+{% extends "base.html" %} {% block title %}Couple Mode - CineMatch{% endblock %}
+{% block content %}
+<h2 class="text-center mb-4">💑 Couple Mode</h2>
+<p class="text-center">
+  Tell us how you both feel and what you like — we'll find something you'll both
+  enjoy!
+</p>
+
+<form action="/couple" method="get" class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <h5>User A</h5>
+      <select name="mood_a" id="mood_a" class="form-control select2-clear" style"width:100%;">
+        <option value="">Select Mood</option>
+        <option value="Happy">😊 Happy</option>
+        <option value="Romantic">💖 Romantic</option>
+        <option value="Sad">😢 Sad</option>
+        <option value="Thrilling">😱 Thrilling</option>
+        <option value="Intense">🔥 Intense</option>
+      </select>
+      <label>Select Genres:</label>
+      <select name="genres_a" class="form-control mb-3" multiple>
+        <option value="35">Comedy</option>
+        <option value="18">Drama</option>
+        <option value="10749">Romance</option>
+        <option value="28">Action</option>
+        <option value="27">Horror</option>
+        <option value="16">Animation</option>
+      </select>
+    </div>
+
+    <div class="col-md-6">
+      <h5>User B</h5>
+      <select name="mood_b" id="mood_b" class="form-control select2-clear" style="width:100%;">
+        <option value="">Select Mood</option>
+        <option value="Happy">😊 Happy</option>
+        <option value="Romantic">💖 Romantic</option>
+        <option value="Sad">😢 Sad</option>
+        <option value="Thrilling">😱 Thrilling</option>
+        <option value="Intense">🔥 Intense</option>
+      </select>
+      <label>Select Genres:</label>
+      <select name="genres_b" class="form-control mb-3" multiple>
+        <option value="35">Comedy</option>
+        <option value="18">Drama</option>
+        <option value="10749">Romance</option>
+        <option value="28">Action</option>
+        <option value="27">Horror</option>
+        <option value="16">Animation</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="text-center">
+    <button type="submit" class="btn btn-danger mt-3" href="">
+      🎬 Find Something for Both
+    </button>
+  </div>
+</form>
+{% if movies %}
+<h3 class="mt-5">🎉 Recommended for Both of You:</h3>
+<ul class="list-unstyled">
+  {% include "movie_list.html" %}
+</ul>
+{% endif %} {% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base.html" %} {% block title %}Talk to AI - CineMatch{% endblock %}
+{% block content %}
+<div class="container text-center mt-5">
+  <h2>🤖 Talk to Mellisa</h2>
+  <p>Type your query below and our smart assistant will help you!</p>
+
+  <form id="ai-form" method="POST" action="/ai-chat" onsubmit="document.getElementById('loading').style.display='block';">
+    <textarea
+      name="user_input"
+      class="form-control mb-3"
+      rows="4"
+      placeholder="Ask me anything..."
+    ></textarea>
+    <button type="submit" class="btn btn-primary">Send</button>
+  </form>
+  <!-- Spinner -->
+  <div id="loading" style="display: none; text-align: center; margin-top: 20px">
+    <div class="spinner-border text-info" role="status">
+      <span class="visually-hidden">Thinking...</span>
+    </div>
+    <p>Thinking...</p>
+  </div>
+  <!-- Response -->
+  {% if response %}
+    <div id="ai-response" class="mt-4">
+      <h5>Response:</h5>
+      <p>{{ response }}</p>
+    </div>
+  {% endif %}
+  </div>
+</div>
+{% endblock %}

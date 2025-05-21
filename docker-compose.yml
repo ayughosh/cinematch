@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: cinematch_flask_web
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+      - ollama
+    networks:
+      - cinematch-net
+    environment:
+      - DATABASE_URL=postgresql://postgres:Ayushi11@db:5432/cinematch
+      - tmdb_api_key=8931e9e5f7f2bb72976518c992ff0a99
+      - SECRET_KEY=e488d317c6eab2c7b34bdca3a7287c1cb6b7193c3d3da62b
+      - POSTGRES_PASSWORD=Ayushi11
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: >
+      sh -c "python run.py"
+
+  db:
+    image: postgres:17
+    container_name: cinematch_postgres
+    restart: always
+    environment:
+      - POSTGRES_DB=cinematch
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=Ayushi11
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - cinematch-net
+
+  ollama:
+    image: ollama/ollama
+    pull_policy: always
+    container_name: ollama
+    hostname: ollama
+    tty: true
+    networks:
+      - cinematch-net
+    ports:
+      - "11434:11434"
+    volumes:
+      - ./run_ollama.sh:/bin/run_ollama.sh
+    entrypoint: ["/bin/sh", "-c", "/bin/run_ollama.sh"]
+volumes:
+  pgdata:
+
+networks:
+  cinematch-net:
+    driver: bridge

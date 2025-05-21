@@ -1,0 +1,60 @@
+{% extends "base.html" %} {% block title %}Advanced Search - CineMatch{%
+endblock %} {% block content %}
+<div class="container mt-5">
+  <h2 class="text-center mb-4">🎯 Advanced Movie Search</h2>
+  <form action="/filter" method="get">
+    <div class="form-group">
+      <label for="genre">Genre</label>
+      <select name="genre" id="genre" class="form-control" required>
+        <option value="">Select Genre</option>
+        <option>Action</option>
+        <option>Adventure</option>
+        <option>Animation</option>
+        <option>Comedy</option>
+        <option>Crime</option>
+        <option>Documentary</option>
+        <option>Drama</option>
+        <option>Fantasy</option>
+        <option>Horror</option>
+        <option>Music</option>
+        <option>Mystery</option>
+        <option>Romance</option>
+        <option>Science Fiction</option>
+        <option>Thriller</option>
+        <option>War</option>
+        <option>Western</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="year">Year</label>
+      <input
+        type="text"
+        name="year"
+        id="year"
+        class="form-control"
+        placeholder="e.g. 2022"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="language">Language Code</label>
+      <input
+        type="text"
+        name="language"
+        id="language"
+        class="form-control"
+        list="language-list"
+        placeholder="e.g. english, japanese, hindi"
+        required
+      />
+      <datalist id="language-list">
+        {% for code, lang in language_lookup.items() %}
+        <option value="{{ lang }}">{% endfor %}</option>
+      </datalist>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Search</button>
+  </form>
+</div>
+{% endblock %}

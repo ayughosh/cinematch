@@ -1,0 +1,85 @@
+<!-- app/templates/home.html -->
+{% extends "base.html" %} {% block title %}Home-CineMatch{% endblock %} {% block
+content %}
+<div class="text-center">
+  <h1 class="mb-4">🎬 Welcome to CineMatch!</h1>
+  <p class="mb-4">Movie & Anime Recommendations Based on Your Mood</p>
+  <!--Search Form-->
+  <form
+    action="/search"
+    method="get"
+    class="form-inline justify-content-center"
+  >
+    <div style="position: relative; display: inline-block">
+      <input
+        type="text"
+        name="query"
+        id="search-box"
+        class="form-control mr-2"
+        placeholder="Search for a movie or anime..."
+        required
+        autocomplete="off"
+      />
+      <div
+        id="suggestion-box"
+        class="dropdown-menu show"
+        style="display: none; position: absolute; z-index: 1000"
+      ></div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Search</button>
+  </form>
+  <!-- Mood Selection Cards Carousel -->
+  <h4 class="mt-5">Select a Mood</h4>
+  {% include 'mood_carousel.html' %}
+
+  <a
+    href="/couple-form"
+    class="btn btn-outline-danger mt-4 feature-button couple-btn"
+    >💑 Try Couple Mode</a
+  >
+  <div>
+    <a
+      href="/comfort_films"
+      class="btn btn-outline-primary mt-4 feature-button comfort-btn"
+      >🎞️ View Comfort Films</a
+    >
+  </div>
+</div>
+
+<script>
+  const searchBox = document.querySelector('input[name="query"]');
+  const suggestionBox = document.getElementById("suggestion-box");
+
+  searchBox.addEventListener("input", function () {
+    const query = this.value;
+
+    if (query.length < 3) {
+      suggestionBox.innerHTML = "";
+      suggestionBox.style.display = "none";
+      return;
+    }
+
+    fetch(`/suggest?q=${query}`)
+      .then((res) => res.json())
+      .then((data) => {
+        const suggestionList = data.suggestions
+          .map(
+            (item) =>
+              `<button class="dropdown-item" type="button" onclick="selectMovie('${item}')">${item}</button>`
+          )
+          .join("");
+
+        suggestionBox.innerHTML = suggestionList;
+        suggestionBox.style.display = "block";
+      });
+  });
+
+  function selectMovie(title) {
+    searchBox.value = title;
+    suggestionBox.innerHTML = "";
+    suggestionBox.style.display = "none";
+  }
+</script>
+
+{% endblock %}

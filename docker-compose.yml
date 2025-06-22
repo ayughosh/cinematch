@@ -16,6 +16,7 @@ services:
       - tmdb_api_key=8931e9e5f7f2bb72976518c992ff0a99
       - SECRET_KEY=e488d317c6eab2c7b34bdca3a7287c1cb6b7193c3d3da62b
       - POSTGRES_PASSWORD=Ayushi11
+      - BASE_URL="http://ollama:11434"
     volumes:
       - .:/app
     working_dir: /app

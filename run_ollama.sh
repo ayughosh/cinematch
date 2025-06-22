@@ -5,10 +5,7 @@ ollama serve &
 
 sleep 5
 
-echo "Pulling Mistral"
-ollama pull mistral
+echo "Pulling Gemma"
+ollama pull gemma:2b
 
-echo "Pulling TinyLlama"
-ollama pull tinyllama
-
-ollama run tinyllama
+ollama run gemma:2b

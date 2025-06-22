@@ -6,8 +6,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Initialize Mistral LLM via Ollama
-llm = Ollama(model="mistral", temperature=0.3)
+# Initialize Gemma LLM via Ollama
+llm = Ollama(model="gemma:2b", base_url="http://ollama:11434", temperature=0.3)
 
 
 # Define LangChain tool(s)
@@ -27,4 +27,5 @@ agent = initialize_agent(
 
 def run_ai_agent(user_input: str, user_id: int) -> str:
     context = f"The current user has ID {user_id}. If the question is about mood history or something you need tools for, use them. Otherwise, reply conversationally."
+    print("RUN_AI_AGENT USING:", llm)
     return agent.run(f"{context}\n{user_input}")

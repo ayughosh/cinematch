@@ -54,7 +54,7 @@ content %}
   searchBox.addEventListener("input", function () {
     const query = this.value;
 
-    if (query.length < 3) {
+    if (query.length > 3) {
       suggestionBox.innerHTML = "";
       suggestionBox.style.display = "none";
       return;

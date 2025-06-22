@@ -4,7 +4,7 @@ import time
 import logging
 
 
-def fetch_tmdb_with_retry(url, params=None, retries=4, delay=0.5):
+def fetch_tmdb_with_retry(url, params=None, retries=6, delay=0.5):
     for attempt in range(retries):
         try:
             response = requests.get(url, params=params, timeout=10)

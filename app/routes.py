@@ -129,37 +129,26 @@ def mood_recommendation():
     )
 
 
-@main.route("/couple-form", methods=["POST", "GET"])
+@main.route("/couple-form", methods=["GET", "POST"])
 def couple_form():
     if request.method == "POST":
-        # Get data from form
-        mood_a = request.form.get["mood_a"]
+        # Capture form data and pass it as query parameters via redirect
+        mood_a = request.form.get("mood_a", "")
         genres_a = request.form.getlist("genres_a")
-        mood_b = request.form.get["mood_b"]
+        mood_b = request.form.get("mood_b", "")
         genres_b = request.form.getlist("genres_b")
 
         return redirect(
             url_for(
-                "main.couple_form",
+                "main.couple_recommendations",
                 mood_a=mood_a,
-                genres_a=genres_a,
                 mood_b=mood_b,
-                genres_b=genres_b,
+                **{f"genres_a": genre for genre in genres_a},
+                **{f"genres_b": genre for genre in genres_b},
             )
         )
-    # If it's GET and has query params → Show results
-    mood_a = request.args.get("mood_a")
-    genres_a = request.args.getlist("genres_a")
-    mood_b = request.args.get("mood_b")
-    genres_b = request.args.getlist("genres_b")
 
-    if mood_a and mood_b:
-        # User has submitted and redirected → show results only now
-        movies = couple_recommendations()
-        return render_template("results.html", movies=movies)
-    else:
-        # Show only form
-        return render_template("couple_form.html")
+    return render_template("couple_form.html")
 
 
 @main.route("/couple", methods=["GET"])
@@ -217,7 +206,7 @@ def couple_recommendations():
         movie["genre_names"] = get_genre_names(genre_ids)
         movie["original_language"] = get_language_name(language_codes)
     return render_template(
-        "couple_form.html", movies=movies, query=final_genres, couple_mode=True
+        "results.html", movies=movies, query=final_genres, couple_mode=True
     )
 
 
@@ -227,7 +216,7 @@ def mark_watched():
     movie_id = request.form.get("movie_id")
     movie_title = request.form.get("movie_title")
 
-    conn=get_db_connection()
+    conn = get_db_connection()
 
     cur = conn.cursor()
 
